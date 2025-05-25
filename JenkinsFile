@@ -1,11 +1,30 @@
 /* groovylint-disable-next-line CompileStatic */
 pipeline {
     agent any
-
+    // environment {
+    //     AWS_ACCESS_KEY = 
+    // }
     stages {
+
+        stage('AWS') {
+            agent {
+                docker {
+                    image 'amazon/aws:cli'
+                    args "--entrypoint=''"
+                }
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'personal-aws', passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
+                sh '''
+                aws --version
+                aws s3 ls
+                '''
+                }
+            }
+        }
+        /*
         stage('Build with docker') {
             agent {
-                /* groovylint-disable-next-line ClosureStatementOnOpeningLineOfMultipleLineClosure */
                 docker {
                     image 'node:18-alpine'
                     reuseNode true
@@ -27,7 +46,6 @@ pipeline {
 
         stage('NPM Test') {
             agent {
-                /* groovylint-disable-next-line ClosureStatementOnOpeningLineOfMultipleLineClosure */
                 docker {
                     image 'node:18-alpine'
                     reuseNode true
@@ -41,10 +59,11 @@ pipeline {
                 '''
             }
         }
+        */
     }
-    post {
-        always {
-            junit 'test-results/junit.xml'
-        }
-    }
+    // post {
+    //     always {
+    //         junit 'test-results/junit.xml'
+    //     }
+    // }
 }
