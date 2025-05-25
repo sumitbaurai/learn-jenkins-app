@@ -23,5 +23,15 @@ pipeline {
                 '''
             }
         }
+
+        stage('NPM Test') {
+            steps {
+                sh '''
+                echo "Starting build"
+                ls -la ./build
+                sh 'test -f build/index.html'
+                '''
+            }
+        }
     }
 }
