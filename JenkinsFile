@@ -26,10 +26,17 @@ pipeline {
         }
 
         stage('NPM Test') {
+            agent {
+                /* groovylint-disable-next-line ClosureStatementOnOpeningLineOfMultipleLineClosure */
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }            
             steps {
                 sh '''
-                ls -la ./build
-                sh 'test -f build/index.html'
+                    ls -la ./build
+                    test -f build/index.html
                 '''
             }
         }
