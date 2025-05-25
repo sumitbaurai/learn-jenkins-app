@@ -1,0 +1,34 @@
+/* groovylint-disable-next-line CompileStatic */
+pipeline {
+    agent any
+
+    stages {
+        stage('Build without docker') {
+            steps {
+                cleanWs()
+                sh '''
+                echo "Without Docker"
+                ls -la
+                touch container-no.txt
+                '''
+            }
+        }
+
+        stage('Build with docker') {
+            agent {
+                /* groovylint-disable-next-line ClosureStatementOnOpeningLineOfMultipleLineClosure */
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                echo "Without Docker"
+                ls -la
+                touch container-yess.txt
+                '''
+            }
+        }
+    }
+}
