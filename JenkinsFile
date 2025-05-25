@@ -32,13 +32,19 @@ pipeline {
                     image 'node:18-alpine'
                     reuseNode true
                 }
-            }            
+            }
             steps {
                 sh '''
                     ls -la ./build
                     test -f build/index.html
                     npm test
                 '''
+            }
+        }
+
+        post {
+            always {
+                juniti 'test-results/junit.xml'
             }
         }
     }
