@@ -41,11 +41,10 @@ pipeline {
                 '''
             }
         }
-
-        post {
-            always {
-                juniti 'test-results/junit.xml'
-            }
+    }
+    post {
+        always {
+            juniti 'test-results/junit.xml'
         }
     }
 }
